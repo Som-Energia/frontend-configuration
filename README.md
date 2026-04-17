@@ -8,13 +8,13 @@ Covers ESLint, Prettier and Vite so all projects stay consistent without duplica
 This package is not published to npm. Install it directly from the GitHub repository:
 
 ```bash
-npm install --save-dev github:Som-Energia/frontend-configuration eslint prettier
+npm install --save-dev github:Som-Energia/frontend-config eslint prettier
 ```
 
 Or pin a specific tag or commit:
 
 ```bash
-npm install --save-dev "github:Som-Energia/frontend-configuration#v1.0.0"
+npm install --save-dev "github:Som-Energia/frontend-config#v1.0.0"
 ```
 
 If you also use the Vite helper, add `vite` to your dev dependencies:
