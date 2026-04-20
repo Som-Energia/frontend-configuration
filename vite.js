@@ -13,7 +13,10 @@ import { defineConfig, loadEnv, mergeConfig } from 'vite'
  * Extend them by passing additional chunks to createManualChunks().
  */
 export const defaultVendorChunks = [
-  { chunk: 'vendor-mui', includes: ['@mui', '@emotion', 'styled-components'] },
+  {
+    chunk: 'vendor-mui',
+    includes: ['@mui', '@emotion', 'styled-components', 'stylis'],
+  },
   {
     chunk: 'vendor-react',
     includes: [

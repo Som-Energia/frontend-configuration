@@ -7,25 +7,44 @@ export interface VendorChunk {
   includes: string[]
 }
 
-/** Pre-defined vendor chunks for MUI, React, charts, i18n and @somenergia. */
+/**
+ * Pre-defined vendor chunk groups.
+ * Extend them by passing additional chunks to {@link createManualChunks}.
+ */
 export declare const defaultVendorChunks: VendorChunk[]
 
 /**
- * Returns a Rollup `manualChunks` function that groups node_modules into
- * per-vendor chunks.
+ * Returns a Rollup `manualChunks` function that groups node_modules
+ * dependencies into per-vendor chunks.
  *
- * @param extraChunks - Additional chunks checked before the defaults.
+ * @param extraChunks - Additional chunks checked **before** the defaults.
+ *                      Useful for project-specific packages (lodash, formik…).
  */
 export declare function createManualChunks(
   extraChunks?: VendorChunk[],
 ): (id: string) => string | undefined
 
 /**
- * Creates a base Vite configuration for SPAs.
+ * Creates a base Vite configuration for SPAs (web applications).
  *
- * @param factory - A project config object or a function that receives
- *                  `{ mode, command }` and returns one. Deep-merged on top
- *                  of the shared defaults.
+ * Provides:
+ * - `BASE_URL` loading from `.env` files
+ * - Automatic vendor chunking via {@link createManualChunks}
+ * - Vitest configuration with jsdom
+ * - Dev server on port 3000
+ *
+ * @param factory - A project config object **or** a function `({ mode, command }) => config`.
+ *                  Deep-merged on top of the shared defaults.
+ *                  Pass `plugins` here: `[react(), svgr(), …]`
+ *
+ * @example
+ * // vite.config.js
+ * import { createAppConfig } from '@somenergia/frontend-config/vite'
+ * import react from '@vitejs/plugin-react'
+ * export default createAppConfig(({ mode }) => ({
+ *   plugins: [react()],
+ *   // project-specific overrides…
+ * }))
  */
 export declare function createAppConfig(
   factory?: UserConfig | ((env: ConfigEnv) => UserConfig),
