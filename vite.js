@@ -64,6 +64,9 @@ export function createManualChunks(
     const match = allChunks.find(({ includes }) =>
       includes.some((pkg) => id.includes(pkg)),
     );
+
+    if (!match) console.log("[vendor catch-all]", id);
+
     return match ? match.chunk : "vendor";
   };
 }
