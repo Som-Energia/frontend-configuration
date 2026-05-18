@@ -6,40 +6,42 @@
 //     // ... project-specific overrides
 //   }))
 
-import { defineConfig, loadEnv, mergeConfig } from 'vite'
+import { defineConfig, loadEnv, mergeConfig } from "vite";
 
 /**
  * Default vendor chunk groups.
  * Extend them by passing additional chunks to createManualChunks().
  */
 export const defaultVendorChunks = [
+  { chunk: "vendor-dayjs", includes: ["dayjs"] },
+  { chunk: "vendor-datepickers", includes: ["@mui/x-date-pickers"] },
   {
-    chunk: 'vendor-mui',
-    includes: ['@mui', '@emotion', 'styled-components', 'stylis'],
+    chunk: "vendor-mui",
+    includes: ["@mui", "@emotion", "styled-components", "stylis"],
   },
   {
-    chunk: 'vendor-react',
+    chunk: "vendor-react",
     includes: [
-      '/node_modules/react/',
-      '/node_modules/react-dom/',
-      '/node_modules/react-router',
-      '/node_modules/scheduler/',
-      '@remix-run',
+      "/node_modules/react/",
+      "/node_modules/react-dom/",
+      "/node_modules/react-router",
+      "/node_modules/scheduler/",
+      "@remix-run",
     ],
   },
   {
-    chunk: 'vendor-charts',
+    chunk: "vendor-charts",
     includes: [
-      '/recharts/',
-      '/d3-',
-      '/react-smooth/',
-      '/recharts-scale/',
-      '/decimal.js-light/',
+      "/recharts/",
+      "/d3-",
+      "/react-smooth/",
+      "/recharts-scale/",
+      "/decimal.js-light/",
     ],
   },
-  { chunk: 'vendor-i18n', includes: ['i18next', 'react-i18next'] },
-  { chunk: 'vendor-somenergia', includes: ['@somenergia'] },
-]
+  { chunk: "vendor-i18n", includes: ["i18next", "react-i18next"] },
+  { chunk: "vendor-somenergia", includes: ["@somenergia"] },
+];
 
 /**
  * Returns a Rollup `manualChunks` function that groups node_modules
@@ -49,14 +51,14 @@ export const defaultVendorChunks = [
  *                             Useful for project-specific chunks (lodash, formik…).
  */
 export function createManualChunks(extraChunks = []) {
-  const allChunks = [...extraChunks, ...defaultVendorChunks]
+  const allChunks = [...extraChunks, ...defaultVendorChunks];
   return function manualChunks(id) {
-    if (!id.includes('node_modules')) return
+    if (!id.includes("node_modules")) return;
     const match = allChunks.find(({ includes }) =>
       includes.some((pkg) => id.includes(pkg)),
-    )
-    return match ? match.chunk : 'vendor'
-  }
+    );
+    return match ? match.chunk : "vendor";
+  };
 }
 
 /**
@@ -76,17 +78,20 @@ export function createAppConfig(factory = () => ({})) {
   return defineConfig(({ mode, command }) => {
     // Vite ignores non-VITE_-prefixed variables from .env files by default.
     // We read BASE_URL explicitly so the base path can vary per mode.
-    process.env = { ...process.env, ...loadEnv(mode, process.cwd(), 'BASE_URL') }
+    process.env = {
+      ...process.env,
+      ...loadEnv(mode, process.cwd(), "BASE_URL"),
+    };
 
     const userConfig =
-      typeof factory === 'function' ? factory({ mode, command }) : factory
+      typeof factory === "function" ? factory({ mode, command }) : factory;
 
     return mergeConfig(
       {
         base: process.env.BASE_URL,
         build: {
-          outDir: 'build',
-          manifest: 'asset-manifest.json',
+          outDir: "build",
+          manifest: "asset-manifest.json",
           cssCodeSplit: false,
           sourcemap: true,
           rollupOptions: {
@@ -94,7 +99,7 @@ export function createAppConfig(factory = () => ({})) {
               manualChunks: createManualChunks(),
             },
           },
-          target: 'es2020',
+          target: "es2020",
         },
         server: {
           open: true,
@@ -102,11 +107,11 @@ export function createAppConfig(factory = () => ({})) {
         },
         test: {
           globals: true,
-          environment: 'jsdom',
+          environment: "jsdom",
           css: true,
         },
       },
       userConfig,
-    )
-  })
+    );
+  });
 }
