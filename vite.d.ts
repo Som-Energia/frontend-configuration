@@ -19,9 +19,12 @@ export declare const defaultVendorChunks: VendorChunk[]
  *
  * @param extraChunks - Additional chunks checked **before** the defaults.
  *                      Useful for project-specific packages (lodash, formik…).
+ * @param args - Optional args to ignore the defaults chunks.
+ *
  */
 export declare function createManualChunks(
   extraChunks?: VendorChunk[],
+  args?: { ignoreDefaults: boolean },
 ): (id: string) => string | undefined
 
 /**

@@ -49,9 +49,16 @@ export const defaultVendorChunks = [
  *
  * @param {Array} extraChunks  Additional chunks checked BEFORE the defaults.
  *                             Useful for project-specific chunks (lodash, formik…).
+ *
+ * @param {{ignoreDefaults: boolean}} Optional args to ignore the defaults chunks.
  */
-export function createManualChunks(extraChunks = []) {
-  const allChunks = [...extraChunks, ...defaultVendorChunks];
+export function createManualChunks(
+  extraChunks = [],
+  args = { ignoreDefaults: false },
+) {
+  const allChunks = args.ignoreDefaults
+    ? [...extraChunks]
+    : [...extraChunks, ...defaultVendorChunks];
   return function manualChunks(id) {
     if (!id.includes("node_modules")) return;
     const match = allChunks.find(({ includes }) =>
